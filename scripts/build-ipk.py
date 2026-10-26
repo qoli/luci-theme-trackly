@@ -37,6 +37,7 @@ def archive(files):
 
 
 def main():
+    version = META['PKG_VERSION'] + '-' + META['PKG_RELEASE']
     payload = []
     for directory, prefix in [('root', ''), ('htdocs', 'www/'), ('ucode', 'usr/share/ucode/luci/')]:
         for path in sorted((SOURCE / directory).rglob('*')):
@@ -45,13 +46,12 @@ def main():
                 mode = 0o755 if name.startswith('etc/uci-defaults/') else 0o644
                 data = path.read_bytes()
                 if path.suffix == '.ut':
-                    # Match luci.mk SubstituteVersion, so SDK and standalone
-                    # packages invalidate browser assets on version upgrades.
+                    # Include the package release so CSS fixes also invalidate
+                    # browser assets when only PKG_RELEASE changes.
                     data = re.sub(rb'"({{\s*(?:media|resource)\s*}}[^"]*\.(?:js|css))"',
-                                  lambda match: b'"' + match[1] + b'?v=' + META['PKG_VERSION'].encode() + b'"', data)
+                                  lambda match: b'"' + match[1] + b'?v=' + version.encode() + b'"', data)
                 payload.append((name, data, mode))
 
-    version = META['PKG_VERSION'] + '-' + META['PKG_RELEASE']
     control = '\n'.join([
         'Package: ' + META['PKG_NAME'], 'Version: ' + version,
         'Architecture: all', 'Depends: luci-base', 'Section: luci',

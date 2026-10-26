@@ -25,7 +25,7 @@
 ./scripts/check.sh
 ```
 
-產物：`dist/luci-theme-trackly_0.1.0-1_all.ipk`。
+產物：`dist/luci-theme-trackly_0.1.1-3_all.ipk`。
 
 也可只建置：
 
@@ -37,10 +37,10 @@ python3 scripts/build-ipk.py
 
 ## 安裝與啟用
 
-先從 [GitHub Releases](https://github.com/qoli/luci-theme-trackly/releases/latest) 下載 `.ipk` 與對應的 `.sha256` 校驗檔。在使用 `opkg` 的 OpenWrt 後台進入「系统 → 软件包」，上傳 IPK 並安裝。或將安裝包傳入設備後執行：
+先從 [GitHub Releases](https://github.com/qoli/luci-theme-trackly/releases/latest) 下載 `.ipk` 與對應的 `.sha256` 校驗檔。在使用 `opkg` 的 OpenWrt 後台進入「系统 → 软件包」，上傳 IPK 並安裝。也可將安裝包傳入設備後執行安裝命令，使用下載或自行建置的實際檔名：
 
 ```sh
-opkg install /tmp/luci-theme-trackly_0.1.0-1_all.ipk
+opkg install /tmp/luci-theme-trackly_0.1.1-3_all.ipk
 ```
 
 接著到「系统 → 系统 → 语言和界面」，選擇 **Trackly**，按「保存并应用」。重新載入後台。
@@ -59,7 +59,7 @@ opkg remove luci-theme-trackly
 
 ## 相容性與驗收
 
-主題使用 ucode 模板與 LuCI 原生 JavaScript 元件。已在 iStoreOS 24.10.8（OpenWrt 24.10 系列）完成安裝、主題切換、登入、保存／套用及移除驗證，並通過 25 組桌面／手機／亮暗版面檢查。實際測試範圍與限制記錄於 [驗收紀錄](docs/acceptance.md)。
+主題使用 ucode 模板與 LuCI 原生 JavaScript 元件。`0.1.0-1` 已在 iStoreOS 24.10.8（OpenWrt 24.10 系列）完成安裝、主題切換、登入、保存／套用及移除驗證，並通過 25 組版面檢查。`0.1.1-3` 修正通用樣式蓋過插件表格的問題，另外通過 localClash 概覽、原生網路介面與防火牆共 15 組版面檢查，並在 NanoPi R5C／OpenWrt 24.10.0-rc5 完成升級與頁面回查。實際測試範圍與限制記錄於 [驗收紀錄](docs/acceptance.md)。
 
 第三方插件若自行固定背景、字體或版面，仍可能保有其專屬外觀；主題不覆寫插件的功能程式。其他 OpenWrt／LuCI 版本需各自驗證，尚未驗收的版本不列為支援保證。
 

@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-theme-trackly
-PKG_VERSION:=0.1.0
-PKG_RELEASE:=1
+PKG_VERSION:=0.1.1
+PKG_RELEASE:=3
 PKGARCH:=all
 PKG_LICENSE:=Apache-2.0
 

@@ -212,8 +212,8 @@ footer.trackly-footer {
 footer.trackly-footer a { color: inherit; }
 footer.trackly-footer span { margin: 0; }
 
-/* Sections and tabs: open surfaces, fine dividers, no repeated cards. */
-body.trackly-theme :is(.cbi-section, .cbi-tblsection) {
+/* Component defaults must yield to an application's own layout rules. */
+:where(body.trackly-theme) :is(.cbi-section, .cbi-tblsection) {
 	min-width: 0;
 	margin: 28px 0 0;
 	padding: 24px 0 0;
@@ -223,8 +223,8 @@ body.trackly-theme :is(.cbi-section, .cbi-tblsection) {
 	background: transparent;
 	box-shadow: none;
 }
-body.trackly-theme .cbi-section-node { margin: 0; padding: 0; }
-body.trackly-theme .cbi-section > legend { padding: 0; border: 0; }
+:where(body.trackly-theme) .cbi-section-node { margin: 0; padding: 0; }
+:where(body.trackly-theme) .cbi-section > legend { padding: 0; border: 0; }
 body.trackly-theme :is(.tabs, .cbi-tabmenu) {
 	display: flex;
 	flex-wrap: wrap;
@@ -334,16 +334,17 @@ body.trackly-theme .cbi-dropdown.cbi-button > ul { background: transparent; }
 body.trackly-theme .cbi-dropdown.cbi-button > ul > li { color: inherit; }
 body.trackly-theme .cbi-dropdown.cbi-button[open] > ul.dropdown { background: var(--trackly-paper); color: var(--trackly-ink); }
 
-/* Dense, native tables remain tables; mobile uses LuCI's labelled rows. */
-body.trackly-theme .table { width: 100%; margin: 0 0 24px; border: 0; border-radius: 0; border-collapse: collapse; background: transparent; box-shadow: none; font-size: 13px; }
-body.trackly-theme .table :is(.th, .td) { padding: 13px 12px; border: 0; border-bottom: 1px solid var(--trackly-line); background: transparent; line-height: 1.65; }
-body.trackly-theme .table .th { color: var(--trackly-muted); font-size: 12px; font-weight: 500; }
-body.trackly-theme .table .tr:first-child .th { border: 0; border-bottom: 1px solid var(--trackly-line); }
-body.trackly-theme .table .tr:hover .td { background: var(--trackly-soft); }
-body.trackly-theme .table .td .cbi-button { min-height: 32px; padding: 5px 12px; font-size: 12px; }
-body.trackly-theme .table .cbi-section-actions { white-space: normal; }
-body.trackly-theme .table .cbi-section-actions > div { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
-body.trackly-theme .table .cbi-section-actions .cbi-button { flex: 0 0 auto; margin: 0; white-space: nowrap; word-break: normal; }
+/* Native tables retain LuCI's labelled mobile rows. Applications can override
+ * these defaults without competing with the theme's body class specificity. */
+:where(body.trackly-theme) .table { width: 100%; margin: 0 0 24px; border: 0; border-radius: 0; border-collapse: collapse; background: transparent; box-shadow: none; font-size: 13px; }
+:where(body.trackly-theme) .table :is(.th, .td) { padding: 13px 12px; border: 0; border-bottom: 1px solid var(--trackly-line); background: transparent; line-height: 1.65; }
+:where(body.trackly-theme) .table .th { color: var(--trackly-muted); font-size: 12px; font-weight: 500; }
+:where(body.trackly-theme) .table .tr:first-child .th { border: 0; border-bottom: 1px solid var(--trackly-line); }
+:where(body.trackly-theme) .table .tr:hover .td { background: var(--trackly-soft); }
+:where(body.trackly-theme) .table .td .cbi-button { min-height: 32px; padding: 5px 12px; font-size: 12px; }
+:where(body.trackly-theme) .table .cbi-section-actions { width: auto; white-space: normal; }
+:where(body.trackly-theme) .table .cbi-section-actions > div { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+:where(body.trackly-theme) .table .cbi-section-actions .cbi-button { flex: 0 0 auto; margin: 0; white-space: nowrap; word-break: normal; }
 body.trackly-theme .ifacebox { border-color: var(--trackly-line); border-radius: 9px; box-shadow: none; }
 body.trackly-theme .ifacebox .ifacebox-head { padding: 6px 10px; border-color: var(--trackly-line); }
 body.trackly-theme :is(.cbi-progressbar, progress) { background: var(--trackly-soft); border-color: var(--trackly-line); border-radius: 6px; }
@@ -419,12 +420,15 @@ body.trackly-login .cbi-page-actions { position: static; margin-top: 24px; borde
 	body.trackly-theme .control-group { flex-wrap: wrap; }
 	body.trackly-theme :is(input[type="text"], input[type="password"], select, textarea, .cbi-select, .cbi-dropdown:not(.btn):not(.cbi-button)) { min-height: 42px; font-size: 16px !important; }
 	body.trackly-theme :is(button, .btn, .cbi-button) { min-height: 40px; padding: 9px 14px; font-size: 13px !important; }
-	body.trackly-theme .table .td .cbi-button { min-height: 38px; }
-	body.trackly-theme .table .td.cbi-section-actions { min-width: 0 !important; width: 100% !important; }
-	body.trackly-theme .table .cbi-section-actions > div { justify-content: flex-start; }
-	body.trackly-theme .table :is(.th, .td) { padding: 10px 8px; }
-	body.trackly-theme .table .tr { margin: 0; padding: 6px 0; border: 0; border-bottom: 1px solid var(--trackly-line); }
-	body.trackly-theme .table :is(.th, .td), body.trackly-theme .table .tr:first-child .th { border: 0; }
+	:where(body.trackly-theme) .table .td .cbi-button { min-height: 38px; }
+	/* Direct actions need their own lines so a narrow row keeps room for data.
+	 * LuCI's wrapped action groups retain their existing flex layout. */
+	:where(body.trackly-theme) .table .td.cbi-section-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; min-width: 0 !important; width: 100% !important; }
+	:where(body.trackly-theme) .table .td.cbi-section-actions > .cbi-button { margin: 0 !important; }
+	:where(body.trackly-theme) .table .cbi-section-actions > div { justify-content: flex-start; }
+	:where(body.trackly-theme) .table :is(.th, .td) { padding: 10px 8px; }
+	:where(body.trackly-theme) .table .tr { margin: 0; padding: 6px 0; border: 0; border-bottom: 1px solid var(--trackly-line); }
+	:where(body.trackly-theme) .table :is(.th, .td), :where(body.trackly-theme) .table .tr:first-child .th { border: 0; }
 	body.trackly-theme .cbi-page-actions { margin-top: 24px; padding-block: 14px; }
 	footer.trackly-footer { margin-inline: 18px; padding-block: 18px 24px; font-size: 10px; }
 	body.trackly-theme #modal_overlay { padding: 12px; }
