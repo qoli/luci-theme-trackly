@@ -1,0 +1,5 @@
+#!/bin/sh
+uci -q batch <<'EOF'
+set luci.themes.Trackly='/luci-static/trackly'
+commit luci
+EOF

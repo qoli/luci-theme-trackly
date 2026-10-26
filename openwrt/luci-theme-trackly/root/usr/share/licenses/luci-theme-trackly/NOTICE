@@ -1,0 +1,17 @@
+Trackly LuCI Theme
+Copyright 2026 Trackly theme contributors
+
+This product includes software developed by the OpenWrt LuCI community.
+base.css and base-mobile.css originate from luci-theme-bootstrap
+26.103.28985~08ac473, iStoreOS/OpenWrt 24.10, licensed under Apache License 2.0.
+The original copyright notices are retained in base.css. The bundled OpenWrt
+logo.svg is also from this package and retains its original colors.
+
+The ucode templates and menu traversal are derived from LuCI Bootstrap:
+Copyright 2008 Steven Barth
+Copyright 2012 David Menting
+Copyright 2008-2022 Jo-Philipp Wich
+
+The visual design follows the Trackly website style confirmed on 2026-10-21,
+with light/dark neutral color roles confirmed on 2026-10-23.
+Trackly application assets and branding are not included.

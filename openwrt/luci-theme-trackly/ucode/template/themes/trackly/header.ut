@@ -1,0 +1,82 @@
+{#
+ Based on the LuCI Bootstrap theme.
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2012 David Menting <david@nut-bolt.nl>
+ Copyright 2008-2022 Jo-Philipp Wich <jo@mein.io>
+ Copyright 2026 Trackly theme contributors
+ Licensed to the public under the Apache License 2.0.
+-#}
+{%
+	import { getuid, getspnam } from 'luci.core';
+	const boardinfo = ubus.call('system', 'board');
+	http.prepare_content('text/html; charset=UTF-8');
+-%}
+<!DOCTYPE html>
+<html lang="{{ dispatcher.lang }}">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="color-scheme" content="light dark">
+		<meta name="darkreader-lock">
+		<link rel="icon" href="{{ media }}/logo.svg" type="image/svg+xml">
+		<title>{{ striptags(boardinfo.hostname) }} · LuCI</title>
+		<script>
+			(function() {
+				var query = window.matchMedia('(prefers-color-scheme: dark)');
+				function update() { document.documentElement.dataset.darkmode = String(query.matches); }
+				update();
+				query.addEventListener('change', update);
+			})();
+		</script>
+		<link rel="stylesheet" href="{{ media }}/base.css">
+		<link rel="stylesheet" href="{{ media }}/base-mobile.css" media="(max-width: 760px)">
+		<link rel="stylesheet" href="{{ media }}/cascade.css">
+		{% if (node?.css): %}
+		<link rel="stylesheet" href="{{ resource }}/{{ node.css }}">
+		{% endif %}
+		{% if (css): %}
+		<style>{{ css }}</style>
+		{% endif %}
+		<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
+		<script src="{{ resource }}/cbi.js"></script>
+	</head>
+	<body class="trackly-theme lang_{{ dispatcher.lang }} {{ ctx.authsession ? '' : 'trackly-login' }}" data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
+		<a class="trackly-skip" href="#maincontent">{{ _('Skip to content') }}</a>
+		{% if (!blank_page): %}
+		<aside id="trackly-sidebar" class="trackly-sidebar">
+			<a class="trackly-brand" href="{{ dispatcher.build_url('admin') }}">OpenWrt<span class="trackly-brand-dot" aria-hidden="true"></span></a>
+			<p class="trackly-router">{{ striptags(boardinfo.hostname) }}</p>
+			<nav id="trackly-menu" aria-label="{{ _('Navigation') }}"></nav>
+			<div class="trackly-sidebar-bottom">
+				<ul id="modemenu" class="trackly-modes" style="display:none"></ul>
+				<span>{{ striptags(version.distname) }} {{ striptags(version.distversion) }}</span>
+			</div>
+		</aside>
+		<button type="button" id="trackly-scrim" class="trackly-scrim" aria-label="{{ _('Close') }}" tabindex="-1" hidden></button>
+		<div class="trackly-workspace">
+			<header class="trackly-topbar">
+				<button type="button" id="trackly-menu-toggle" class="trackly-menu-toggle" aria-label="{{ _('Navigation') }}" aria-controls="trackly-sidebar" aria-expanded="false">
+					<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+				</button>
+				<div id="trackly-context" class="trackly-context">{{ striptags(boardinfo.hostname) }}</div>
+				<div id="indicators"></div>
+			</header>
+			<main id="maincontent" class="container" tabindex="-1">
+				{% if (getuid() == 0 && getspnam('root')?.pwdp === ''): %}
+				<div class="alert-message warning">
+					<h4>{{ _('No password set!') }}</h4>
+					<p>{{ _('There is no password set on this router. Please configure a root password to protect the web interface.') }}</p>
+					{% if (dispatcher.lookup('admin/system/admin')): %}
+					<div class="right"><a class="btn" href="{{ dispatcher.build_url('admin/system/admin') }}">{{ _('Go to password configuration...') }}</a></div>
+					{% endif %}
+				</div>
+				{% endif %}
+				{% if (boardinfo.rootfs_type == 'initramfs'): %}
+				<div class="alert-message warning">
+					<h4>{{ _('System running in recovery (initramfs) mode.') }}</h4>
+					<p>{{ _('No changes to settings will be stored and are lost after rebooting. This mode should only be used to install a firmware upgrade') }}</p>
+				</div>
+				{% endif %}
+				<noscript><div class="alert-message warning">{{ _('You must enable JavaScript in your browser or LuCI will not work properly.') }}</div></noscript>
+				<div id="tabmenu" style="display:none"></div>
+		{% endif %}

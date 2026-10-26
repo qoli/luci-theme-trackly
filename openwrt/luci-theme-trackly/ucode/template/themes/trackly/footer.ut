@@ -1,0 +1,13 @@
+		{% if (!blank_page): %}
+			</main>
+			<footer class="trackly-footer">
+				<span><a href="https://github.com/openwrt/luci" target="_blank" rel="noreferrer">{{ version.luciname }}</a> · {{ version.luciversion }}</span>
+				<span>Trackly</span>
+			</footer>
+		</div>
+		{% if (ctx.authsession): %}
+		<script>L.require('menu-trackly')</script>
+		{% endif %}
+		{% endif %}
+	</body>
+</html>

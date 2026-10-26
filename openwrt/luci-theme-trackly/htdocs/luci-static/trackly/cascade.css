@@ -1,0 +1,439 @@
+/* Trackly LuCI theme · Apache-2.0
+ * Neutral roles follow the approved Trackly visual system.
+ * base.css supplies LuCI's widget behavior; this file owns the presentation.
+ * --accent and --highlight, when supplied by the embedding project, stay owned
+ * by that project. Semantic error/warning colors come from LuCI's base styles.
+ */
+:root {
+	--trackly-paper: #fff;
+	--trackly-ink: #000;
+	--trackly-muted: #666;
+	--trackly-soft: #f5f6f7;
+	--trackly-line: rgba(0, 0, 0, .1);
+	--trackly-display: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+	--trackly-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+	--trackly-sidebar: 232px;
+}
+
+:root[data-darkmode="true"] {
+	--trackly-paper: #000;
+	--trackly-ink: #fff;
+	--trackly-muted: #a1a1a6;
+	--trackly-soft: #1c1c1e;
+	--trackly-line: rgba(255, 255, 255, .1);
+}
+
+:root,
+:root[data-darkmode="true"] {
+	--trackly-focus: var(--highlight, var(--accent, var(--trackly-ink)));
+	--background-color-high: var(--trackly-paper);
+	--background-color-medium: var(--trackly-soft);
+	--background-color-low: var(--trackly-soft);
+	--text-color-highest: var(--trackly-ink);
+	--text-color-high: var(--trackly-ink);
+	--text-color-medium: var(--trackly-muted);
+	--text-color-low: var(--trackly-muted);
+	--border-color-high: var(--trackly-line);
+	--border-color-medium: var(--trackly-line);
+	--border-color-low: var(--trackly-line);
+	--primary-color-high: var(--trackly-focus);
+	--primary-color-medium: var(--trackly-focus);
+	--primary-color-low: var(--trackly-focus);
+	--on-primary-color: var(--trackly-paper);
+}
+
+* { box-sizing: border-box; }
+html { min-height: 100%; }
+body.trackly-theme {
+	margin: 0;
+	padding: 0;
+	display: block;
+	min-height: 100vh;
+	background: var(--trackly-paper);
+	color: var(--trackly-ink);
+	font: 15px/1.6 var(--trackly-body);
+	font-synthesis: none;
+	overflow-y: auto;
+}
+body.trackly-theme :is(input, button, select, textarea, option) { font-family: var(--trackly-body); }
+body.trackly-theme :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+	outline: 2px solid var(--trackly-focus);
+	outline-offset: 3px;
+}
+body.trackly-theme a { text-underline-offset: 4px; }
+body.trackly-theme :is(h1, h2, h3, h4, legend) {
+	color: var(--trackly-ink);
+	font-family: var(--trackly-display);
+	font-weight: 650;
+	letter-spacing: -.025em;
+	line-height: 1.4;
+}
+body.trackly-theme h2 { margin: 0 0 12px; font-size: 30px; font-weight: 720; }
+body.trackly-theme :is(h3, legend) { margin: 0 0 18px; font-size: 18px; }
+body.trackly-theme h4 { font-size: 16px; }
+body.trackly-theme :is(p, .cbi-map-descr, .cbi-section-descr) { line-height: 1.7; }
+body.trackly-theme :is(.cbi-map-descr, .cbi-section-descr, .cbi-value-description) { color: var(--trackly-muted); }
+body.trackly-theme .cbi-map-descr { margin-bottom: 28px; font-size: 14px; }
+
+/* Shell: native, permission-filtered navigation; no additional status polling. */
+.trackly-skip {
+	position: fixed;
+	top: -100px;
+	left: 16px;
+	z-index: 1100;
+	padding: 10px 16px;
+	border: 1px solid var(--trackly-line);
+	border-radius: 8px;
+	background: var(--trackly-paper);
+}
+.trackly-skip:focus { top: 12px; }
+.trackly-sidebar {
+	position: fixed;
+	inset: 0 auto 0 0;
+	z-index: 100;
+	display: flex;
+	flex-direction: column;
+	width: var(--trackly-sidebar);
+	padding: 36px 22px 24px;
+	border-right: 1px solid var(--trackly-line);
+	background: var(--trackly-paper);
+	overflow-y: auto;
+}
+.trackly-brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	color: var(--trackly-ink);
+	font: 750 25px/1.25 var(--trackly-display);
+	letter-spacing: -.055em;
+	text-decoration: none;
+}
+.trackly-brand:hover { text-decoration: none; }
+.trackly-brand-dot { width: 5px; height: 5px; margin-top: 13px; border-radius: 50%; background: currentColor; }
+.trackly-router { margin: 8px 0 34px; color: var(--trackly-muted); font-size: 12px; overflow-wrap: anywhere; }
+#trackly-menu { flex: 1; }
+.trackly-menu-group { margin: 0 0 14px; padding: 0; border: 0; }
+.trackly-menu-group > summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 40px;
+	padding: 8px 10px;
+	border-radius: 8px;
+	color: var(--trackly-ink);
+	font-size: 14px;
+	font-weight: 650;
+	list-style: none;
+	cursor: pointer;
+}
+.trackly-menu-group > summary::-webkit-details-marker { display: none; }
+.trackly-menu-group > summary::after {
+	content: '';
+	width: 5px;
+	height: 5px;
+	margin-right: 3px;
+	border-right: 1px solid var(--trackly-muted);
+	border-bottom: 1px solid var(--trackly-muted);
+	transform: rotate(-45deg);
+}
+.trackly-menu-group[open] > summary::after { transform: rotate(45deg); }
+.trackly-menu-group > summary:hover { background: var(--trackly-soft); }
+.trackly-menu-items { margin: 4px 0 0; padding: 0; list-style: none; }
+.trackly-menu-items > li { padding: 0; margin: 1px 0; list-style: none; }
+.trackly-menu-items a,
+.trackly-menu-leaf {
+	position: relative;
+	display: block;
+	padding: 8px 12px 8px 22px;
+	border-radius: 7px;
+	color: var(--trackly-muted);
+	font-size: 13px;
+	line-height: 1.5;
+	text-decoration: none;
+	overflow-wrap: anywhere;
+}
+.trackly-menu-items a:hover,
+.trackly-menu-leaf:hover { background: var(--trackly-soft); color: var(--trackly-ink); text-decoration: none; }
+.trackly-menu-items a[aria-current="page"] { color: var(--trackly-ink); font-weight: 650; }
+.trackly-menu-items a[aria-current="page"]::before {
+	content: '';
+	position: absolute;
+	inset: 10px auto 10px 8px;
+	width: 2px;
+	border-radius: 1px;
+	background: var(--trackly-focus);
+}
+.trackly-menu-leaf { margin: 8px 0; padding-left: 10px; color: var(--trackly-ink); font-weight: 600; }
+.trackly-menu-leaf[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--trackly-focus); text-underline-offset: 6px; }
+.trackly-sidebar-bottom { margin-top: 28px; padding: 16px 10px 0; border-top: 1px solid var(--trackly-line); color: var(--trackly-muted); font-size: 11px; }
+.trackly-modes { margin: 0 0 12px; padding: 0; list-style: none; }
+.trackly-modes li { display: inline; margin-right: 10px; }
+.trackly-workspace { margin-left: var(--trackly-sidebar); min-width: 0; }
+header.trackly-topbar {
+	position: static;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	width: 100%;
+	max-width: 1280px;
+	min-height: 88px;
+	margin: 0 auto;
+	padding: 18px 48px;
+	border: 0;
+	background: transparent;
+	box-shadow: none;
+}
+.trackly-context { display: flex; align-items: center; gap: 12px; color: var(--trackly-muted); font-size: 12px; }
+.trackly-context strong { color: var(--trackly-ink); font-weight: 500; }
+.trackly-topbar #indicators { margin-left: auto; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.trackly-topbar #indicators .label { padding: 3px 8px; border-radius: 5px; font-size: 11px; }
+.trackly-menu-toggle { display: none; }
+.trackly-scrim[hidden] { display: none; }
+body.trackly-theme #maincontent {
+	width: 100%;
+	max-width: 1280px;
+	min-width: 0;
+	min-height: calc(100vh - 180px);
+	margin: 0 auto;
+	padding: 28px 48px 40px;
+	outline: 0;
+}
+footer.trackly-footer {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	max-width: 1184px;
+	margin: 0 48px;
+	padding: 20px 0 28px;
+	border-top: 1px solid var(--trackly-line);
+	color: var(--trackly-muted);
+	font-size: 11px;
+}
+footer.trackly-footer a { color: inherit; }
+footer.trackly-footer span { margin: 0; }
+
+/* Sections and tabs: open surfaces, fine dividers, no repeated cards. */
+body.trackly-theme :is(.cbi-section, .cbi-tblsection) {
+	min-width: 0;
+	margin: 28px 0 0;
+	padding: 24px 0 0;
+	border: 0;
+	border-top: 1px solid var(--trackly-line);
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+}
+body.trackly-theme .cbi-section-node { margin: 0; padding: 0; }
+body.trackly-theme .cbi-section > legend { padding: 0; border: 0; }
+body.trackly-theme :is(.tabs, .cbi-tabmenu) {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 22px;
+	margin: 0 0 26px;
+	padding: 0;
+	border: 0;
+	border-bottom: 1px solid var(--trackly-line);
+	background: transparent;
+	box-shadow: none;
+}
+body.trackly-theme :is(.tabs, .cbi-tabmenu) > li {
+	float: none;
+	height: auto;
+	margin: 0 0 -1px;
+	padding: 0;
+	border: 0;
+	border-bottom: 2px solid transparent;
+	border-radius: 0;
+	background: transparent;
+}
+body.trackly-theme :is(.tabs, .cbi-tabmenu) > li > a { display: block; padding: 10px 0 12px; color: var(--trackly-muted); font-size: 13px; font-weight: 500; line-height: 1.5; }
+body.trackly-theme :is(.tabs > li.active, .cbi-tabmenu > li.cbi-tab) { border-bottom-color: var(--trackly-focus); background: transparent; }
+body.trackly-theme :is(.tabs > li.active, .cbi-tabmenu > li.cbi-tab) > a { color: var(--trackly-ink); }
+body.trackly-theme :is(.tabs, .cbi-tabmenu) > li:hover { background: transparent; }
+
+/* Keep LuCI's actual input, validation, dropdown and dynamic-list behavior. */
+body.trackly-theme .cbi-value { align-items: flex-start; margin-bottom: 22px; }
+body.trackly-theme .cbi-value label.cbi-value-title { flex-basis: 176px; padding-top: 9px; text-align: left; color: var(--trackly-ink); font-size: 14px; font-weight: 500; line-height: 1.5; }
+body.trackly-theme .cbi-value-field { min-width: 0; margin-left: 28px; }
+body.trackly-theme :is(input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"]):not([type="reset"]), textarea, select, .cbi-select, .cbi-dropdown:not(.btn):not(.cbi-button)) {
+	max-width: 100%;
+	min-height: 38px;
+	padding: 8px 11px;
+	border: 1px solid var(--trackly-line);
+	border-radius: 9px;
+	background: var(--trackly-soft);
+	color: var(--trackly-ink);
+	font-size: 14px;
+	line-height: 20px;
+	box-shadow: none;
+}
+body.trackly-theme :is(input:not([type="checkbox"]):not([type="radio"]), select, .cbi-select) { height: auto; }
+body.trackly-theme :is(input[type="checkbox"], input[type="radio"]) { accent-color: var(--trackly-focus); }
+body.trackly-theme :is(input[type="checkbox"], input[type="radio"]) { width: 16px; height: 16px; }
+body.trackly-theme :is(input[type="checkbox"], input[type="radio"])::before { width: 16px; height: 16px; border-color: var(--trackly-muted); background: var(--trackly-soft); box-shadow: none; }
+body.trackly-theme :is(input[type="checkbox"], input[type="radio"])::after { width: 12px; height: 12px; }
+body.trackly-theme .cbi-value-field > .cbi-checkbox { height: 38px; }
+body.trackly-theme :is(input, textarea, select, button, .btn, .cbi-button, .cbi-select.focus, .cbi-dropdown):focus {
+	border-color: var(--trackly-focus) !important;
+	box-shadow: none;
+}
+body.trackly-theme :is(.cbi-input-invalid, .cbi-select.cbi-input-invalid, .cbi-dropdown.cbi-input-invalid),
+body.trackly-theme .cbi-input-invalid:focus { border-color: var(--error-color-high) !important; }
+body.trackly-theme .cbi-input-invalid:focus-visible { outline-color: var(--error-color-high); }
+body.trackly-theme :is(input, textarea, select):disabled { cursor: not-allowed; opacity: .55; }
+body.trackly-theme .cbi-value-description { margin-top: 7px; font-size: 12px; line-height: 1.6; }
+body.trackly-theme .control-group { max-width: 100%; gap: 8px; }
+body.trackly-theme .control-group > input { min-width: 0; flex: 1; }
+body.trackly-theme .control-group > :is(.btn, .cbi-button, button) { flex: 0 0 auto; margin-left: 0; border-radius: 999px; padding: 7px 15px; white-space: nowrap; word-break: normal; }
+body.trackly-theme .cbi-dynlist { max-width: 100%; }
+body.trackly-theme .cbi-dynlist > .item { min-height: 36px; padding: 6px 30px 6px 10px; border-color: var(--trackly-line); border-radius: 8px; background: var(--trackly-soft); box-shadow: none; font-size: 13px; }
+body.trackly-theme .cbi-dynlist > .item::after { border: 0; border-left: 1px solid var(--trackly-line); border-radius: 0; color: var(--trackly-muted); }
+body.trackly-theme .cbi-dropdown:not(.btn):not(.cbi-button) > ul { background: var(--trackly-soft); }
+body.trackly-theme .cbi-dropdown > ul > li { min-height: 28px; }
+body.trackly-theme .cbi-dropdown[open] > ul.dropdown { border-color: var(--trackly-line); border-radius: 9px; background: var(--trackly-paper); }
+body.trackly-theme .cbi-dropdown[open] > ul.dropdown > li.focus { background: var(--trackly-soft); color: var(--trackly-ink); }
+
+body.trackly-theme :is(.btn, .cbi-button, button, input[type="submit"], input[type="reset"]) {
+	min-height: 36px;
+	width: auto;
+	max-width: 100%;
+	padding: 7px 15px;
+	border: 1px solid var(--trackly-line);
+	border-radius: 999px;
+	background: var(--trackly-paper);
+	color: var(--trackly-ink);
+	font: 550 13px/20px var(--trackly-body);
+	text-shadow: none;
+	box-shadow: none;
+	white-space: normal;
+	cursor: pointer;
+}
+body.trackly-theme :is(.btn, .cbi-button, button):hover { background: var(--trackly-soft); text-decoration: none; }
+body.trackly-theme :is(.cbi-button-apply, .cbi-button-save, .cbi-button-positive, .cbi-button-add, .cbi-button-action.important) { border-color: var(--trackly-ink); background: var(--trackly-ink); color: var(--trackly-paper); }
+body.trackly-theme :is(.cbi-button-apply, .cbi-button-save, .cbi-button-positive, .cbi-button-add):hover { background: var(--trackly-ink); color: var(--trackly-paper); opacity: .85; }
+body.trackly-theme :is(.cbi-button-negative, .cbi-button-remove, .cbi-button-reset.important) { color: var(--error-color-high); border-color: var(--trackly-line); background: var(--trackly-paper); }
+body.trackly-theme :is(button, .cbi-button, .btn):disabled { opacity: .45; cursor: not-allowed; }
+body.trackly-theme .cbi-page-actions {
+	position: sticky;
+	bottom: 0;
+	z-index: 25;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 8px;
+	margin: 32px 0 0;
+	padding: 18px 0;
+	border-top: 1px solid var(--trackly-line);
+	background: var(--trackly-paper);
+}
+body.trackly-theme .cbi-page-actions > * { margin: 0; }
+body.trackly-theme .cbi-button-dropdown { border-radius: 999px; }
+body.trackly-theme .cbi-button-dropdown > .cbi-button { border-radius: 999px 0 0 999px; }
+body.trackly-theme .cbi-dropdown.cbi-button > ul { background: transparent; }
+body.trackly-theme .cbi-dropdown.cbi-button > ul > li { color: inherit; }
+body.trackly-theme .cbi-dropdown.cbi-button[open] > ul.dropdown { background: var(--trackly-paper); color: var(--trackly-ink); }
+
+/* Dense, native tables remain tables; mobile uses LuCI's labelled rows. */
+body.trackly-theme .table { width: 100%; margin: 0 0 24px; border: 0; border-radius: 0; border-collapse: collapse; background: transparent; box-shadow: none; font-size: 13px; }
+body.trackly-theme .table :is(.th, .td) { padding: 13px 12px; border: 0; border-bottom: 1px solid var(--trackly-line); background: transparent; line-height: 1.65; }
+body.trackly-theme .table .th { color: var(--trackly-muted); font-size: 12px; font-weight: 500; }
+body.trackly-theme .table .tr:first-child .th { border: 0; border-bottom: 1px solid var(--trackly-line); }
+body.trackly-theme .table .tr:hover .td { background: var(--trackly-soft); }
+body.trackly-theme .table .td .cbi-button { min-height: 32px; padding: 5px 12px; font-size: 12px; }
+body.trackly-theme .table .cbi-section-actions { white-space: normal; }
+body.trackly-theme .table .cbi-section-actions > div { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+body.trackly-theme .table .cbi-section-actions .cbi-button { flex: 0 0 auto; margin: 0; white-space: nowrap; word-break: normal; }
+body.trackly-theme .ifacebox { border-color: var(--trackly-line); border-radius: 9px; box-shadow: none; }
+body.trackly-theme .ifacebox .ifacebox-head { padding: 6px 10px; border-color: var(--trackly-line); }
+body.trackly-theme :is(.cbi-progressbar, progress) { background: var(--trackly-soft); border-color: var(--trackly-line); border-radius: 6px; }
+body.trackly-theme .cbi-progressbar { min-width: 0; height: auto; margin: 0; border: 0; background: transparent; }
+body.trackly-theme .cbi-progressbar::before { position: static; display: block; padding-bottom: 7px; white-space: normal; overflow: visible; color: var(--trackly-ink); font-size: 12px; line-height: 1.5; }
+body.trackly-theme .cbi-progressbar::after { content: ''; position: absolute; inset: auto 0 0; height: 6px; border: 1px solid var(--trackly-line); border-radius: 3px; background: var(--trackly-soft); }
+body.trackly-theme .cbi-progressbar > div { position: relative; z-index: 1; max-width: 100%; height: 6px; background: var(--trackly-muted); border-radius: 3px; }
+body.trackly-theme :is(pre, code, .cbi-input-textarea) { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+body.trackly-theme pre { max-width: 100%; padding: 16px; border-color: var(--trackly-line); border-radius: 10px; background: var(--trackly-soft); color: var(--trackly-ink); font-size: 12px; }
+body.trackly-theme :is(textarea, #syslog) { max-width: 100%; }
+body.trackly-theme[data-page="admin-statistics-graphs"] [data-plugin] img { filter: none; }
+
+body.trackly-theme .alert-message { margin: 0 0 24px; padding: 16px 18px; border: 1px solid var(--trackly-line); border-radius: 10px; background: var(--trackly-soft); color: var(--trackly-ink); box-shadow: none; font-size: 13px; }
+body.trackly-theme .alert-message.warning { border-left: 3px solid var(--warn-color-high); }
+body.trackly-theme :is(.alert-message.error, .alert-message.danger) { border-left: 3px solid var(--error-color-high); }
+body.trackly-theme .alert-message.success { border-left: 3px solid var(--success-color-high); }
+body.trackly-theme .alert-message h4 { margin: 0 0 6px; font-size: 14px; }
+body.trackly-theme .alert-message p { margin: 0; }
+body.trackly-theme #modal_overlay { inset: 0; padding: 24px; background: rgba(0, 0, 0, .48); transition: none; }
+body.trackly-theme .modal { width: 100%; max-width: 780px; margin: 8vh auto; padding: 28px; border: 1px solid var(--trackly-line); border-radius: 18px; background: var(--trackly-paper); color: var(--trackly-ink); box-shadow: 0 24px 80px rgba(0, 0, 0, .16); }
+body.trackly-theme .modal h4 { margin: 0 0 18px; font-size: 20px; }
+body.trackly-theme .modal .cbi-page-actions { position: static; }
+body.trackly-theme .modal > .right { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+/* Login keeps LuCI's own credential and error handling. */
+.trackly-login .trackly-sidebar { position: static; width: auto; padding: 8vh 32px 0; align-items: center; border: 0; }
+.trackly-login :is(.trackly-router, #trackly-menu, .trackly-sidebar-bottom, .trackly-topbar) { display: none; }
+.trackly-login .trackly-workspace { margin-left: 0; }
+body.trackly-login #maincontent { width: min(100%, 480px); min-height: 0; margin: 0 auto; padding: 44px 28px; }
+.trackly-login h2 { font-size: 28px; }
+body.trackly-login .cbi-section { padding: 0; border: 0; }
+.trackly-login .cbi-value { display: block; }
+body.trackly-login .cbi-value label.cbi-value-title { display: block; margin-bottom: 8px; padding: 0; }
+body.trackly-login .cbi-value-field { margin: 0; }
+body.trackly-login :is(input[type="text"], input[type="password"]) { width: 100%; }
+body.trackly-login .cbi-page-actions { position: static; margin-top: 24px; border: 0; }
+.trackly-login .cbi-button-apply { flex: 1; }
+.trackly-login .trackly-footer { justify-content: center; border: 0; }
+.trackly-login .trackly-footer span:last-child { display: none; }
+
+@media (max-width: 1080px) {
+	:root { --trackly-sidebar: 212px; }
+	header.trackly-topbar { padding-inline: 32px; }
+	body.trackly-theme #maincontent { padding-inline: 32px; }
+	footer.trackly-footer { margin-inline: 32px; }
+	body.trackly-theme .cbi-value label.cbi-value-title { flex-basis: 150px; }
+	body.trackly-theme .cbi-value-field { margin-left: 20px; }
+}
+
+@media (max-width: 760px) {
+	body.trackly-theme { font-size: 14px; }
+	body.trackly-menu-open { overflow: hidden; }
+	.trackly-sidebar { display: none; width: min(296px, calc(100vw - 48px)); padding-top: 28px; z-index: 600; }
+	.trackly-menu-open .trackly-sidebar { display: flex; }
+	.trackly-menu-items a { min-height: 42px; padding-block: 11px; font-size: 14px; }
+	.trackly-menu-group > summary { min-height: 44px; }
+	.trackly-workspace { margin-left: 0; }
+	header.trackly-topbar { min-height: 72px; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--trackly-line); }
+	body.trackly-theme #trackly-menu-toggle { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 40px; min-height: 40px; padding: 8px; border-radius: 10px; }
+	body.trackly-theme #trackly-scrim { position: fixed; inset: 0; z-index: 550; width: 100%; max-width: none; height: 100%; padding: 0; border: 0; border-radius: 0; background: rgba(0, 0, 0, .4); }
+	body.trackly-theme #trackly-scrim:hover { background: rgba(0, 0, 0, .4); }
+	.trackly-context { flex-wrap: wrap; gap: 4px 8px; font-size: 11px; }
+	.trackly-topbar #indicators { max-width: 40%; }
+	body.trackly-theme #maincontent { min-height: calc(100vh - 160px); padding: 28px 18px 24px; }
+	body.trackly-theme h2 { font-size: 27px; }
+	body.trackly-theme :is(h3, legend) { font-size: 17px; }
+	body.trackly-theme :is(.tabs, .cbi-tabmenu) { gap: 2px 18px; margin-bottom: 22px; }
+	body.trackly-theme :is(.tabs, .cbi-tabmenu) > li > a { padding: 10px 0; font-size: 13px; }
+	body.trackly-theme .cbi-value { display: block; margin: 0 0 22px; padding: 0; border: 0; }
+	body.trackly-theme .cbi-value.hidden { display: none; }
+	body.trackly-theme .cbi-value label.cbi-value-title { display: block; margin-bottom: 8px; padding: 0; font-size: 14px; }
+	body.trackly-theme .cbi-value-field { width: 100%; margin-left: 0; }
+	body.trackly-theme .control-group { flex-wrap: wrap; }
+	body.trackly-theme :is(input[type="text"], input[type="password"], select, textarea, .cbi-select, .cbi-dropdown:not(.btn):not(.cbi-button)) { min-height: 42px; font-size: 16px !important; }
+	body.trackly-theme :is(button, .btn, .cbi-button) { min-height: 40px; padding: 9px 14px; font-size: 13px !important; }
+	body.trackly-theme .table .td .cbi-button { min-height: 38px; }
+	body.trackly-theme .table .td.cbi-section-actions { min-width: 0 !important; width: 100% !important; }
+	body.trackly-theme .table .cbi-section-actions > div { justify-content: flex-start; }
+	body.trackly-theme .table :is(.th, .td) { padding: 10px 8px; }
+	body.trackly-theme .table .tr { margin: 0; padding: 6px 0; border: 0; border-bottom: 1px solid var(--trackly-line); }
+	body.trackly-theme .table :is(.th, .td), body.trackly-theme .table .tr:first-child .th { border: 0; }
+	body.trackly-theme .cbi-page-actions { margin-top: 24px; padding-block: 14px; }
+	footer.trackly-footer { margin-inline: 18px; padding-block: 18px 24px; font-size: 10px; }
+	body.trackly-theme #modal_overlay { padding: 12px; }
+	body.trackly-theme .modal { margin: 4vh auto; padding: 22px 18px; border-radius: 14px; }
+	.trackly-login .trackly-sidebar { display: flex; width: auto; padding-top: 8vh; }
+	body.trackly-login #maincontent { min-height: 0; padding: 32px 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body.trackly-theme :is(.cbi-button, .btn, input, select, textarea, #modal_overlay) { transition: none; }
+	body.trackly-theme .cbi-progressbar > div { transition: none; }
+}
