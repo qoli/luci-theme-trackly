@@ -9,7 +9,7 @@
 - `luci-base 26.209.18626~2e45965`；對照主題為 `luci-theme-bootstrap 26.103.28985~08ac473`。
 - Arc CDP，Chrome `150.0.7871.187`；真實 LuCI／rpcd／opkg，沒有以靜態 mockup 替代後台。
 - 從已停止的既有測試 VM 轉換出獨立 qcow2 磁碟；只在複本中安裝、切換與移除套件。測試複本的 LAN 調整為啟動器轉發目標 `192.168.101.1`。
-- 預覽入口：`http://trackly.localhost:18089/cgi-bin/luci/admin/status/overview`。使用專屬 localhost 名稱，隔離其他本機 LuCI 測試的 Cookie。
+- 使用專屬 localhost 名稱隔離其他本機 LuCI 測試的 Cookie；此環境為本機測試 VM，沒有提供公開線上 demo。
 
 ## 最終版面矩陣：25／25 通過
 
@@ -23,7 +23,7 @@
 
 每個情境均等待真實內容與選單載入，再讀取 DOM、樣式、畫面寬度與 JavaScript 例外。最終 25 個情境的文件寬度均與指定視窗寬度一致，沒有可見元素超出右界；亮色畫布為 `rgb(255,255,255)`、暗色為 `rgb(0,0,0)`，正向流程沒有 JavaScript 例外。
 
-已人工查看桌面與手機截圖，核對中性色、字體層級、細線分區、表單、按鈕、表格與換行。原始 DOM 結果及截圖保存在 `.runtime/evidence/final-matrix.json` 與同目錄的 `final-*.png`，不進入版本控制。
+已人工查看桌面與手機截圖，核對中性色、字體層級、細線分區、表單、按鈕、表格與換行。公開的代表畫面見[桌面亮色](images/desktop-light.png)與[手機暗色](images/mobile-dark.png)。完整 DOM 結果及截圖保存在本機 `.runtime/evidence/final-matrix.json` 與同目錄的 `final-*.png`。
 
 ## 實際操作
 

@@ -2,6 +2,12 @@
 
 一套面向 OpenWrt 的獨立 LuCI 主題：黑白畫布、圓潤標題、細線分區，以及適合管理後台的資訊密度。視覺依循 Trackly 網站的中性色系統，介面內容、權限、表單驗證與設定套用沿用 LuCI。
 
+[下載最新版 IPK](https://github.com/qoli/luci-theme-trackly/releases/latest) · [驗收紀錄](docs/acceptance.md)
+
+![iStoreOS 24.10.8 實測：桌面亮色主題](docs/images/desktop-light.png)
+
+[查看手機暗色畫面](docs/images/mobile-dark.png)
+
 ## 功能
 
 - 跟隨系統的亮色／暗色外觀，完整使用白／黑背景。
@@ -31,7 +37,7 @@ python3 scripts/build-ipk.py
 
 ## 安裝與啟用
 
-在使用 `opkg` 的 OpenWrt 後台進入「系统 → 软件包」，上傳 IPK 並安裝。或將安裝包傳入測試設備後執行：
+先從 [GitHub Releases](https://github.com/qoli/luci-theme-trackly/releases/latest) 下載 `.ipk` 與對應的 `.sha256` 校驗檔。在使用 `opkg` 的 OpenWrt 後台進入「系统 → 软件包」，上傳 IPK 並安裝。或將安裝包傳入設備後執行：
 
 ```sh
 opkg install /tmp/luci-theme-trackly_0.1.0-1_all.ipk
